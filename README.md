@@ -1,0 +1,119 @@
+# Lokal Installer
+
+TUI installer for [Lokal](https://<placeholder>) self-hosted servers. Handles provisioning, configuration, and service management on Linux VMs.
+
+## Install
+
+```bash
+curl -fsSL https://get.<placeholder>/install | sh
+```
+
+The bootstrap script detects your architecture, downloads the binary, caches sudo credentials, and starts the installer.
+
+### Requirements
+
+- Linux (amd64 or arm64)
+- sudo access or root
+
+## Usage
+
+```
+lokal install [OPTIONS]
+lokal update [--lokal-dir PATH]
+lokal uninstall [--lokal-dir PATH] [--yes]
+lokal status [--lokal-dir PATH]
+```
+
+### Install
+
+Interactive TUI that walks through server setup:
+
+1. License key validation
+2. Server registration
+3. Dependency installation (Docker, jq, chrony)
+4. DNS propagation
+5. System user and directory setup
+6. TLS certificate provisioning
+7. Firewall configuration (ufw + fail2ban)
+8. Service configuration and launch
+9. Health check verification
+
+```bash
+# Standard install
+lokal install
+
+# Provide license key via flag
+lokal install --license-key <key>
+
+# Dry run (works on any OS, no system changes)
+lokal install --dry-run
+
+# Custom install directory
+lokal install --lokal-dir /srv/lokal
+```
+
+### Update
+
+Pulls the latest Docker images and restarts services.
+
+```bash
+lokal update
+```
+
+### Status
+
+Shows container status, health check result, and disk usage.
+
+```bash
+lokal status
+```
+
+### Uninstall
+
+Stops services and removes the installation directory.
+
+```bash
+lokal uninstall        # interactive confirmation
+lokal uninstall --yes  # skip confirmation
+```
+
+## What gets installed
+
+| Component | Description |
+|-----------|-------------|
+| alacahoyuk | Server engine (Rust/Axum, encrypted SQLite) |
+| caddy | Reverse proxy with automatic TLS |
+| livekit | Voice and video (WebRTC media server) |
+
+All services run as Docker containers under a dedicated `lokal` system user.
+
+### File layout
+
+```
+/opt/lokal/
+  .env                 License key, health token, LiveKit credentials
+  docker-compose.yml   Service definitions
+  Caddyfile            Reverse proxy configuration
+  livekit.yaml         LiveKit server configuration
+  data/                Encrypted database and server files
+  tls/                 TLS certificate and private key
+  README.txt           Quick reference (generated on install)
+```
+
+## Building from source
+
+```bash
+# Debug build
+cargo build
+
+# Release build (optimized for size)
+cargo build --release
+
+# Cross-compile for Linux (static musl binary)
+cargo build --release --target x86_64-unknown-linux-musl
+cargo build --release --target aarch64-unknown-linux-musl
+```
+
+## Issues
+
+Report bugs and feature requests at [github.com/rwxdash/lokal-installer/issues](https://github.com/rwxdash/lokal-installer/issues).
