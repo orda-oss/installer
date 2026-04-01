@@ -36,7 +36,7 @@ jobs:
             - name: Rename binary
               run: cp target/${{ matrix.target }}/release/lokal lokal-linux-${{ matrix.arch }}
             - name: Upload artifact
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
               with:
                   name: lokal-linux-${{ matrix.arch }}
                   path: lokal-linux-${{ matrix.arch }}
