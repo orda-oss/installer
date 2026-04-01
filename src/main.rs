@@ -26,6 +26,10 @@ use tokio::sync::mpsc;
 
 #[tokio::main]
 async fn main() {
+    rustls::crypto::ring::default_provider()
+        .install_default()
+        .expect("Failed to install TLS provider");
+
     let cli = Cli::parse();
 
     let result = match cli.command {
