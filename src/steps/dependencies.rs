@@ -117,7 +117,7 @@ async fn tune_docker_daemon(
         "userland-proxy": false,
         "log-driver": "local",
         "log-opts": {"max-size": "10m", "max-file": "3"},
-        "default-ulimits": {"nofile": {"Hard": 65536, "Soft": 65536}},
+        "default-ulimits": {"nofile": {"Name": "nofile", "Hard": 65536, "Soft": 65536}},
         "features": {"containerd-snapshotter": true}
     });
 

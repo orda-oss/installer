@@ -103,10 +103,8 @@ pub async fn fetch_certificate(
     if !status.is_success() {
         let text = res.text().await.unwrap_or_default();
         let msg = parse_api_error(&text).unwrap_or_else(|| match status.as_u16() {
-            404 => {
-                "No certificate available yet. It may still be issuing -- try again in a minute."
-                    .to_string()
-            }
+            404 => "No certificate available yet. It may still be issuing, try again in a minute."
+                .to_string(),
             503 => "Certificate issuance in progress. Try again in a minute.".to_string(),
             _ => format!("Certificate fetch failed (HTTP {status})"),
         });

@@ -138,6 +138,7 @@ Status:             cd {dir} && docker compose ps
 Logs:               cd {dir} && docker compose logs -f
 Logs (service):     cd {dir} && docker compose logs -f alacahoyuk
 Restart:            cd {dir} && docker compose restart
+Pull + restart:     cd {dir} && docker compose pull && docker compose up -d
 Stop:               cd {dir} && docker compose down
 Start:              cd {dir} && docker compose up -d
 Update:             lokal update

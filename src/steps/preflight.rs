@@ -8,7 +8,6 @@ use crate::{
 };
 
 pub async fn run(ctx: &InstallContext, tx: &mpsc::Sender<Message>) -> Result<StepOutcome, String> {
-    // Gather host info (works on any OS -- needed for the welcome screen)
     let os = std::env::consts::OS.to_string();
     let arch = match std::env::consts::ARCH {
         "x86_64" => "amd64".to_string(),

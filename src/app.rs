@@ -123,7 +123,7 @@ impl App {
             level,
             text: text.into(),
         });
-        // Keep bounded -- only the tail is rendered
+        // Keep bounded, only the tail is rendered
         const MAX_LOGS_PER_STEP: usize = 50;
         if logs.len() > MAX_LOGS_PER_STEP {
             logs.drain(..logs.len() - MAX_LOGS_PER_STEP);
