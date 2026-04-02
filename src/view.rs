@@ -9,7 +9,7 @@ use ratatui::{
 };
 
 use crate::{
-    app::{App, MAX_VISIBLE_LOGS},
+    app::App,
     model::{LogLevel, Step, StepState},
 };
 
@@ -27,26 +27,28 @@ const LOGO: &[&str] = &[
 pub fn render(app: &App, frame: &mut Frame) -> usize {
     let area = frame.area();
 
-    // Centered container
-    let content_width = 76u16.min(area.width.saturating_sub(2));
-    let content_height = (area.height * 4 / 5).max(10); // 80% of terminal height
-    let h_pad = area.width.saturating_sub(content_width) / 2;
-    let v_pad = area.height.saturating_sub(content_height) / 2;
-    let container = Rect::new(
-        area.x + h_pad,
-        area.y + v_pad,
-        content_width,
-        content_height,
-    );
+    let inner = if app.fullscreen {
+        area
+    } else {
+        let content_width = 76u16.min(area.width.saturating_sub(2));
+        let content_height = (area.height * 4 / 5).max(10);
+        let h_pad = area.width.saturating_sub(content_width) / 2;
+        let v_pad = area.height.saturating_sub(content_height) / 2;
+        let container = Rect::new(
+            area.x + h_pad,
+            area.y + v_pad,
+            content_width,
+            content_height,
+        );
 
-    // Outer border
-    let border = Block::default()
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(MUTED));
-    let inner = border.inner(container);
-    frame.render_widget(border, container);
+        let border = Block::default()
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(MUTED));
+        let result = border.inner(container);
+        frame.render_widget(border, container);
+        result
+    };
 
-    // Inner layout: content + status bar
     let layout = Layout::default()
         .direction(Direction::Vertical)
         .constraints([Constraint::Min(1), Constraint::Length(1)])
@@ -202,7 +204,8 @@ fn render_flow(app: &App, frame: &mut Frame, area: Rect) -> usize {
             _ => {
                 // Show recent logs for this step (max N lines)
                 let logs = app.step_logs(step);
-                let start = logs.len().saturating_sub(MAX_VISIBLE_LOGS);
+                let max = if app.verbose { usize::MAX } else { 5 };
+                let start = logs.len().saturating_sub(max);
                 for entry in &logs[start..] {
                     if entry.text.is_empty() {
                         continue;
@@ -446,7 +449,7 @@ fn render_status_bar(app: &App, frame: &mut Frame, area: Rect) {
     } else if app.unsupported_os {
         Span::styled(" q exit", Style::default().fg(MUTED))
     } else {
-        Span::styled(" ? help", Style::default().fg(MUTED))
+        Span::styled(" ctrl+h help", Style::default().fg(MUTED))
     };
 
     let right = Span::styled(format!("{elapsed} "), Style::default().fg(MUTED));
@@ -489,13 +492,14 @@ fn render_help_overlay(_app: &App, frame: &mut Frame, area: Rect) {
         row("shift+up / down", "Scroll fast"),
         row("g", "Scroll to top"),
         row("G", "Follow output"),
+        row("ctrl+f", "Toggle fullscreen"),
         Line::styled("", bg),
         row("ctrl+c", "Abort installation"),
         row("ctrl+c ctrl+c", "Force quit"),
         row("q", "Exit (when done)"),
         Line::styled("", bg),
         Line::styled(
-            "  Press any key to close",
+            "  Press any key to close (ctrl+h to toggle)",
             Style::default().fg(DIM).bg(Color::Black),
         ),
         Line::styled("", bg),

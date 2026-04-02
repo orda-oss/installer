@@ -12,7 +12,6 @@ use crate::{
 };
 
 const SPINNER: &[char] = &['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'];
-pub const MAX_VISIBLE_LOGS: usize = 5;
 
 pub enum Effect {
     None,
@@ -38,6 +37,8 @@ pub struct App {
     pub spinner_tick: usize,
     pub done: bool,
     pub unsupported_os: bool,
+    pub verbose: bool,
+    pub fullscreen: bool,
     pub scroll_offset: Option<usize>, // None = auto-scroll to bottom
     pub max_scroll: usize,            // set by view each frame
     pub show_help: bool,
@@ -72,6 +73,8 @@ impl App {
             spinner_tick: 0,
             done: false,
             unsupported_os: false,
+            verbose: false,
+            fullscreen: false,
             scroll_offset: None,
             max_scroll: 0,
             show_help: false,
@@ -278,8 +281,12 @@ impl App {
             return Effect::Quit;
         }
 
-        // Help overlay toggle
-        if code == KeyCode::Char('?') {
+        // Global toggles (Ctrl combos work in all states)
+        if code == KeyCode::Char('f') && modifiers.contains(KeyModifiers::CONTROL) {
+            self.fullscreen = !self.fullscreen;
+            return Effect::None;
+        }
+        if code == KeyCode::Char('h') && modifiers.contains(KeyModifiers::CONTROL) {
             self.show_help = !self.show_help;
             return Effect::None;
         }

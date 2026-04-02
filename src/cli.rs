@@ -27,6 +27,10 @@ pub struct InstallArgs {
     #[arg(long)]
     pub dry_run: bool,
 
+    /// Show full logs for each step (no truncation)
+    #[arg(long, short)]
+    pub verbose: bool,
+
     /// License key (or set LICENSE_KEY env var)
     #[arg(long, env = "LICENSE_KEY")]
     pub license_key: Option<String>,
