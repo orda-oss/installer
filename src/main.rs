@@ -70,6 +70,7 @@ async fn run_install(args: InstallArgs) -> Result<(), String> {
     let cancelled = Arc::new(AtomicBool::new(false));
     let mut app = App::new(context, tx.clone());
     app.verbose = args.verbose;
+    app.no_cleanup = args.no_cleanup;
 
     let mut terminal = tui::setup().map_err(|e| format!("Failed to setup terminal: {e}"))?;
     event::spawn(tx.clone());

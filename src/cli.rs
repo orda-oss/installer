@@ -31,6 +31,10 @@ pub struct InstallArgs {
     #[arg(long, short)]
     pub verbose: bool,
 
+    /// Skip cleanup on failure (for debugging)
+    #[arg(long)]
+    pub no_cleanup: bool,
+
     /// License key (or set LICENSE_KEY env var)
     #[arg(long, env = "LICENSE_KEY")]
     pub license_key: Option<String>,

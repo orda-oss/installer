@@ -38,6 +38,7 @@ pub struct App {
     pub done: bool,
     pub unsupported_os: bool,
     pub verbose: bool,
+    pub no_cleanup: bool,
     pub fullscreen: bool,
     pub scroll_offset: Option<usize>, // None = auto-scroll to bottom
     pub max_scroll: usize,            // set by view each frame
@@ -74,6 +75,7 @@ impl App {
             done: false,
             unsupported_os: false,
             verbose: false,
+            no_cleanup: false,
             fullscreen: false,
             scroll_offset: None,
             max_scroll: 0,
@@ -197,7 +199,12 @@ impl App {
                         .insert(Step::Dependencies, StepState::Failed(err));
                 }
 
-                Effect::RunCleanup
+                if self.no_cleanup {
+                    self.should_quit = true;
+                    Effect::None
+                } else {
+                    Effect::RunCleanup
+                }
             }
 
             Message::HostDetected(info, use_sudo) => {
@@ -252,7 +259,7 @@ impl App {
                 if self.done {
                     return Effect::Quit;
                 }
-                if self.abort_requested {
+                if self.abort_requested || self.no_cleanup {
                     return Effect::Quit;
                 }
                 self.abort_requested = true;
