@@ -184,14 +184,14 @@ async fn tune_sysctl(
     tx: &mpsc::Sender<Message>,
     cleanup: &CleanupRegistry,
 ) -> Result<(), String> {
-    let sysctl_conf = std::path::Path::new("/etc/sysctl.d/99-lokal.conf");
+    let sysctl_conf = std::path::Path::new("/etc/sysctl.d/99-orda.conf");
 
     if ctx.dry_run || sysctl_conf.exists() {
         return Ok(());
     }
 
     let content = "\
-# Lokal: larger UDP socket buffers for LiveKit media traffic
+# Orda: larger UDP socket buffers for LiveKit media traffic
 net.core.rmem_max=26214400
 net.core.wmem_max=26214400
 ";

@@ -91,10 +91,7 @@ impl App {
     }
 
     pub fn step_logs(&self, step: Step) -> &[LogEntry] {
-        self.step_logs
-            .get(&step)
-            .map(|v| v.as_slice())
-            .unwrap_or(&[])
+        self.step_logs.get(&step).map_or(&[], |v| v.as_slice())
     }
 
     pub fn security_countdown(&self) -> u64 {
@@ -245,8 +242,8 @@ impl App {
             }
 
             Message::UidResolved(uid, gid) => {
-                self.context.lokal_uid = uid;
-                self.context.lokal_gid = gid;
+                self.context.orda_uid = uid;
+                self.context.orda_gid = gid;
                 Effect::None
             }
 

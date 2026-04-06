@@ -34,12 +34,12 @@ jobs:
             - name: Build
               run: cargo build --release --target ${{ matrix.target }}
             - name: Rename binary
-              run: cp target/${{ matrix.target }}/release/lokal lokal-linux-${{ matrix.arch }}
+              run: cp target/${{ matrix.target }}/release/orda orda-linux-${{ matrix.arch }}
             - name: Upload artifact
               uses: actions/upload-artifact@v6
               with:
-                  name: lokal-linux-${{ matrix.arch }}
-                  path: lokal-linux-${{ matrix.arch }}
+                  name: orda-linux-${{ matrix.arch }}
+                  path: orda-linux-${{ matrix.arch }}
 
     release:
         name: Create release
@@ -56,7 +56,7 @@ jobs:
                   GH_TOKEN: ${{ github.token }}
               run: |
                   gh release create "${{ github.ref_name }}" \
-                    lokal-linux-amd64/lokal-linux-amd64 \
-                    lokal-linux-arm64/lokal-linux-arm64 \
+                    orda-linux-amd64/orda-linux-amd64 \
+                    orda-linux-arm64/orda-linux-arm64 \
                     scripts/bootstrap.sh \
                     --generate-notes

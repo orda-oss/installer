@@ -16,7 +16,7 @@ pub async fn run(
     let user_exists = if ctx.dry_run {
         false
     } else {
-        command_output("id", &["-u", "lokal"]).is_some()
+        command_output("id", &["-u", "orda"]).is_some()
     };
 
     if !user_exists {
@@ -38,40 +38,40 @@ pub async fn run(
                 "--no-create-home",
                 "--shell",
                 "/usr/sbin/nologin",
-                "lokal",
+                "orda",
             ],
         )
         .await?;
 
         if !out.success && !ctx.dry_run {
-            return Err("Failed to create service user 'lokal'".to_string());
+            return Err("Failed to create service user 'orda'".to_string());
         }
-        cleanup.record(Artifact::SystemUserCreated("lokal".to_string()));
+        cleanup.record(Artifact::SystemUserCreated("orda".to_string()));
     }
 
     let (uid, gid) = if ctx.dry_run {
         (1000, 1000)
     } else {
-        let uid: u32 = command_output("id", &["-u", "lokal"])
+        let uid: u32 = command_output("id", &["-u", "orda"])
             .and_then(|s| s.parse().ok())
-            .ok_or("Failed to get lokal UID")?;
-        let gid: u32 = command_output("id", &["-g", "lokal"])
+            .ok_or("Failed to get orda UID")?;
+        let gid: u32 = command_output("id", &["-g", "orda"])
             .and_then(|s| s.parse().ok())
-            .ok_or("Failed to get lokal GID")?;
+            .ok_or("Failed to get orda GID")?;
         (uid, gid)
     };
 
     let _ = tx.send(Message::UidResolved(uid, gid)).await;
 
-    let lokal_dir = ctx.lokal_dir.to_string_lossy();
-    let tls_dir = ctx.lokal_dir.join("tls");
-    let data_dir = ctx.lokal_dir.join("data");
-    let dir_created = !ctx.lokal_dir.exists() || ctx.dry_run;
+    let orda_dir = ctx.orda_dir.to_string_lossy();
+    let tls_dir = ctx.orda_dir.join("tls");
+    let data_dir = ctx.orda_dir.join("data");
+    let dir_created = !ctx.orda_dir.exists() || ctx.dry_run;
 
     let _ = tx
         .send(Message::StepLog(
             Step::SystemSetup,
-            format!("Creating directories at {lokal_dir}"),
+            format!("Creating directories at {orda_dir}"),
         ))
         .await;
 
@@ -88,7 +88,7 @@ pub async fn run(
     .await?;
 
     if dir_created {
-        cleanup.record(Artifact::DirectoryCreated(ctx.lokal_dir.clone()));
+        cleanup.record(Artifact::DirectoryCreated(ctx.orda_dir.clone()));
     }
 
     run_sudo(
@@ -97,7 +97,7 @@ pub async fn run(
         ctx.dry_run,
         ctx.use_sudo,
         "chown",
-        &["-R", "lokal:lokal", &lokal_dir],
+        &["-R", "orda:orda", &orda_dir],
     )
     .await?;
 

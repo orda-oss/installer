@@ -2,15 +2,15 @@ use std::path::Path;
 
 use crate::system::{derive_health_token, extract_env_val};
 
-pub async fn run(lokal_dir: &Path) -> Result<(), String> {
-    let compose_file = lokal_dir.join("docker-compose.yml");
+pub async fn run(orda_dir: &Path) -> Result<(), String> {
+    let compose_file = orda_dir.join("docker-compose.yml");
     if !compose_file.exists() {
-        return Err(format!("No installation found at {}", lokal_dir.display()));
+        return Err(format!("No installation found at {}", orda_dir.display()));
     }
 
-    println!("Lokal Status");
+    println!("Orda Status");
     println!("============");
-    println!("Directory: {}", lokal_dir.display());
+    println!("Directory: {}", orda_dir.display());
     println!();
 
     let compose_str = compose_file.to_string_lossy();
@@ -23,7 +23,7 @@ pub async fn run(lokal_dir: &Path) -> Result<(), String> {
     println!("Containers:");
     println!("{}", String::from_utf8_lossy(&output.stdout));
 
-    let env_path = lokal_dir.join(".env");
+    let env_path = orda_dir.join(".env");
     if let Ok(content) = tokio::fs::read_to_string(&env_path).await
         && let Some(license_key) = extract_env_val(&content, "LICENSE_KEY")
     {
@@ -50,7 +50,7 @@ pub async fn run(lokal_dir: &Path) -> Result<(), String> {
         }
     }
 
-    let data_dir = lokal_dir.join("data");
+    let data_dir = orda_dir.join("data");
     if data_dir.exists() {
         let data_str = data_dir.to_string_lossy();
         let output = tokio::process::Command::new("du")

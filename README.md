@@ -1,11 +1,11 @@
-# Lokal Installer
+# Orda Installer
 
-TUI installer for [Lokal](https://<placeholder>) self-hosted servers. Handles provisioning, configuration, and service management on Linux VMs.
+TUI installer for [Orda](https://joinorda.com) self-hosted servers. Handles provisioning, configuration, and service management on Linux VMs.
 
 ## Install
 
 ```bash
-curl -fsSL https://get.<placeholder>/install | sh
+curl -fsSL https://get.orda.chat/install | sh
 ```
 
 The bootstrap script detects your architecture, downloads the binary, caches sudo credentials, and starts the installer.
@@ -18,10 +18,10 @@ The bootstrap script detects your architecture, downloads the binary, caches sud
 ## Usage
 
 ```
-lokal install [OPTIONS]
-lokal update [--lokal-dir PATH]
-lokal uninstall [--lokal-dir PATH] [--yes]
-lokal status [--lokal-dir PATH]
+orda install [OPTIONS]
+orda update [--orda-dir PATH]
+orda uninstall [--orda-dir PATH] [--yes]
+orda status [--orda-dir PATH]
 ```
 
 ### Install
@@ -40,16 +40,16 @@ Interactive TUI that walks through server setup:
 
 ```bash
 # Standard install
-lokal install
+orda install
 
 # Provide license key via flag
-lokal install --license-key <key>
+orda install --license-key <key>
 
 # Dry run (works on any OS, no system changes)
-lokal install --dry-run
+orda install --dry-run
 
 # Custom install directory
-lokal install --lokal-dir /srv/lokal
+orda install --orda-dir /srv/orda
 ```
 
 ### Update
@@ -57,7 +57,7 @@ lokal install --lokal-dir /srv/lokal
 Pulls the latest Docker images and restarts services.
 
 ```bash
-lokal update
+orda update
 ```
 
 ### Status
@@ -65,7 +65,7 @@ lokal update
 Shows container status, health check result, and disk usage.
 
 ```bash
-lokal status
+orda status
 ```
 
 ### Uninstall
@@ -73,8 +73,8 @@ lokal status
 Stops services and removes the installation directory.
 
 ```bash
-lokal uninstall        # interactive confirmation
-lokal uninstall --yes  # skip confirmation
+orda uninstall        # interactive confirmation
+orda uninstall --yes  # skip confirmation
 ```
 
 ## What gets installed
@@ -85,12 +85,12 @@ lokal uninstall --yes  # skip confirmation
 | caddy | Reverse proxy with automatic TLS |
 | livekit | Voice and video (WebRTC media server) |
 
-All services run as Docker containers under a dedicated `lokal` system user.
+All services run as Docker containers under a dedicated `orda` system user.
 
 ### File layout
 
 ```
-/opt/lokal/
+/opt/orda/
   .env                 License key, health token, LiveKit credentials
   docker-compose.yml   Service definitions
   Caddyfile            Reverse proxy configuration
@@ -116,4 +116,4 @@ cargo build --release --target aarch64-unknown-linux-musl
 
 ## Issues
 
-Report bugs and feature requests at [github.com/rwxdash/lokal-installer/issues](https://github.com/rwxdash/lokal-installer/issues).
+Report bugs and feature requests at [github.com/orda-oss/installer/issues](https://github.com/orda-oss/installer/issues).

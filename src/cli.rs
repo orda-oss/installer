@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(name = "lokal", version, about = "Lokal server installer")]
+#[command(name = "orda", version, about = "Orda server installer")]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Option<Command>,
@@ -11,7 +11,7 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Command {
-    /// Install Lokal server (default if no subcommand given)
+    /// Install Orda server (default if no subcommand given)
     Install(InstallArgs),
     /// Pull latest images and restart services
     Update(CommonArgs),
@@ -40,11 +40,11 @@ pub struct InstallArgs {
     pub license_key: Option<String>,
 
     /// Installation directory
-    #[arg(long, default_value = "/opt/lokal")]
-    pub lokal_dir: PathBuf,
+    #[arg(long, default_value = "/opt/orda")]
+    pub orda_dir: PathBuf,
 
     /// Central backend URL
-    #[arg(long, default_value = "https://lokal.workspace.rustyneuron.net/hub/v1")]
+    #[arg(long, default_value = "https://api.orda.chat/hub/v1")]
     pub semerkant_url: String,
 
     /// Docker image for alacahoyuk
@@ -55,15 +55,15 @@ pub struct InstallArgs {
 #[derive(clap::Args, Clone)]
 pub struct CommonArgs {
     /// Installation directory
-    #[arg(long, default_value = "/opt/lokal")]
-    pub lokal_dir: PathBuf,
+    #[arg(long, default_value = "/opt/orda")]
+    pub orda_dir: PathBuf,
 }
 
 #[derive(clap::Args, Clone)]
 pub struct UninstallArgs {
     /// Installation directory
-    #[arg(long, default_value = "/opt/lokal")]
-    pub lokal_dir: PathBuf,
+    #[arg(long, default_value = "/opt/orda")]
+    pub orda_dir: PathBuf,
 
     /// Skip confirmation prompt
     #[arg(long)]

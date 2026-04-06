@@ -107,11 +107,11 @@ volumes:
     )
 }
 
-pub fn render_readme(server_address: &str, lokal_dir: &Path) -> String {
-    let dir = lokal_dir.display();
+pub fn render_readme(server_address: &str, orda_dir: &Path) -> String {
+    let dir = orda_dir.display();
     format!(
         "\
-Lokal Server
+Orda Server
 ============
 
 Public IP:  {server_address}
@@ -141,8 +141,8 @@ Restart:            cd {dir} && docker compose restart
 Pull + restart:     cd {dir} && docker compose pull && docker compose up -d
 Stop:               cd {dir} && docker compose down
 Start:              cd {dir} && docker compose up -d
-Update:             lokal update
-Uninstall:          lokal uninstall
+Update:             orda update
+Uninstall:          orda uninstall
 
 Ports
 -----
@@ -156,16 +156,13 @@ Backups
 Server data lives in {dir}/data/. Back it up with your VM provider's
 snapshot feature, or manually:
 
-  tar czf lokal-backup-$(date +%Y%m%d).tar.gz -C {dir} data/
+  tar czf orda-backup-$(date +%Y%m%d).tar.gz -C {dir} data/
 
 TLS certificates are managed by the central server and rotated
 automatically. You do not need to back them up.
 
 Troubleshooting
 ---------------
-Check service health:
-  curl -s https://localhost/health -k
-
 View recent alacahoyuk logs:
   cd {dir} && docker compose logs --tail 50 alacahoyuk
 
@@ -173,7 +170,7 @@ Restart a single service:
   cd {dir} && docker compose restart alacahoyuk
 
 Report issues:
-  https://github.com/rwxdash/lokal-installer
+  https://github.com/orda-oss/installer
 "
     )
 }

@@ -14,14 +14,9 @@ use crate::{
 };
 
 const ACCENT: Color = Color::Rgb(255, 191, 0);
+const BRAND: Color = Color::Rgb(0, 190, 180);
 const DIM: Color = Color::DarkGray;
 const MUTED: Color = Color::Rgb(100, 100, 100);
-
-const LOGO: &[&str] = &[
-    "█    ▄▀▀▄ █  █ ▄▀▀▄ █   ",
-    "█    █  █ █▄▀  █▀▀█ █   ",
-    "▀▀▀▀  ▀▀  ▀  ▀ ▀  ▀ ▀▀▀▀",
-];
 
 // Returns the max scroll offset for the current content
 pub fn render(app: &App, frame: &mut Frame) -> usize {
@@ -77,12 +72,24 @@ fn render_flow(app: &App, frame: &mut Frame, area: Rect) -> usize {
 
     // Header: logo + host info
     lines.push(Line::raw(""));
-    for logo_line in LOGO {
-        lines.push(Line::styled(
-            *logo_line,
-            Style::default().fg(ACCENT).add_modifier(Modifier::BOLD),
-        ));
-    }
+    lines.push(Line::from(vec![
+        Span::styled("  ░▒▓ ", Style::default().fg(BRAND)),
+        Span::styled(
+            "orda",
+            Style::default().fg(BRAND).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(
+            ".chat",
+            Style::default().fg(DIM).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(" installer", Style::default().fg(MUTED)),
+    ]));
+    lines.push(Line::styled(
+        "      byoc communication solution",
+        Style::default().fg(MUTED),
+    ));
+    let separator = "─".repeat(padded.width as usize);
+    lines.push(Line::styled(separator, Style::default().fg(MUTED)));
     lines.push(Line::raw(""));
 
     let h = &app.host;
@@ -127,10 +134,7 @@ fn render_flow(app: &App, frame: &mut Frame, area: Rect) -> usize {
         ]));
         lines.push(Line::from(vec![
             label("issues"),
-            Span::styled(
-                "github.com/rwxdash/lokal-installer",
-                Style::default().fg(MUTED),
-            ),
+            Span::styled("github.com/orda-oss/installer", Style::default().fg(MUTED)),
         ]));
         lines.push(Line::raw(""));
         lines.push(check(h.connectivity, "network reachable"));
@@ -151,7 +155,7 @@ fn render_flow(app: &App, frame: &mut Frame, area: Rect) -> usize {
         ));
         lines.push(Line::raw(""));
         lines.push(Line::styled(
-            "  Lokal server requires Linux (amd64 or arm64).",
+            "  Orda server requires Linux (amd64 or arm64).",
             Style::default().fg(Color::White),
         ));
         lines.push(Line::styled(
@@ -349,7 +353,7 @@ fn render_security_section(app: &App, lines: &mut Vec<Line<'static>>) {
 }
 
 fn render_complete_section(app: &App, lines: &mut Vec<Line<'static>>, visible_height: usize) {
-    let dir = app.context.lokal_dir.to_string_lossy();
+    let dir = app.context.orda_dir.to_string_lossy();
 
     let section_start = lines.len();
 

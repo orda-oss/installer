@@ -1,18 +1,18 @@
 #!/bin/sh
 set -eu
 
-# Lokal installer bootstrap
-# Usage: curl -fsSL https://get.<placeholder>/install | sh
+# Orda installer bootstrap
+# Usage: curl -fsSL https://get.orda.chat/install | sh
 
-REPO="rwxdash/lokal-installer"
-BINARY_NAME="lokal"
+REPO="orda-oss/installer"
+BINARY_NAME="orda"
 INSTALL_DIR="/usr/local/bin"
 
 main() {
     OS="$(uname -s)"
     case "$OS" in
         Linux) ;;
-        *) printf 'Error: Lokal requires Linux. Detected: %s\n' "$OS" >&2; exit 1 ;;
+        *) printf 'Error: Orda requires Linux. Detected: %s\n' "$OS" >&2; exit 1 ;;
     esac
 
     ARCH="$(uname -m)"

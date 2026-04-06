@@ -2,15 +2,15 @@ use std::path::Path;
 
 use crate::system::command_output;
 
-pub async fn run(lokal_dir: &Path, skip_confirm: bool) -> Result<(), String> {
-    if !lokal_dir.exists() {
-        return Err(format!("No installation found at {}", lokal_dir.display()));
+pub async fn run(orda_dir: &Path, skip_confirm: bool) -> Result<(), String> {
+    if !orda_dir.exists() {
+        return Err(format!("No installation found at {}", orda_dir.display()));
     }
 
     if !skip_confirm {
         eprintln!(
             "This will stop all services and remove {}",
-            lokal_dir.display()
+            orda_dir.display()
         );
         eprint!("Type 'yes' to confirm: ");
 
@@ -25,7 +25,7 @@ pub async fn run(lokal_dir: &Path, skip_confirm: bool) -> Result<(), String> {
         }
     }
 
-    let compose_file = lokal_dir.join("docker-compose.yml");
+    let compose_file = orda_dir.join("docker-compose.yml");
     if compose_file.exists() {
         let compose_str = compose_file.to_string_lossy();
         println!("Stopping services...");
@@ -39,7 +39,7 @@ pub async fn run(lokal_dir: &Path, skip_confirm: bool) -> Result<(), String> {
         .map(|s| s == "0")
         .unwrap_or(false);
 
-    let dir_str = lokal_dir.to_string_lossy();
+    let dir_str = orda_dir.to_string_lossy();
     println!("Removing {dir_str}...");
 
     let status = if is_root {

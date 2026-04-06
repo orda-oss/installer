@@ -1190,23 +1190,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 
 [[package]]
-name = "lokal-installer"
-version = "1.0.0-alpha.1"
-dependencies = [
- "clap",
- "crossterm",
- "futures",
- "rand 0.10.0",
- "ratatui",
- "reqwest",
- "rustls",
- "serde",
- "serde_json",
- "sha2 0.11.0",
- "tokio",
-]
-
-[[package]]
 name = "lru"
 version = "0.16.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1339,6 +1322,23 @@ name = "openssl-probe"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c87def4c32ab89d880effc9e097653c8da5d6ef28e6b539d313baaacfbafcbe"
+
+[[package]]
+name = "orda-installer"
+version = "1.0.0-alpha.1"
+dependencies = [
+ "clap",
+ "crossterm",
+ "futures",
+ "rand 0.10.0",
+ "ratatui",
+ "reqwest",
+ "rustls",
+ "serde",
+ "serde_json",
+ "sha2 0.11.0",
+ "tokio",
+]
 
 [[package]]
 name = "ordered-float"

@@ -44,7 +44,7 @@ pub async fn run(
         return Ok(StepOutcome::Done);
     }
 
-    let compose_file = ctx.lokal_dir.join("docker-compose.yml");
+    let compose_file = ctx.orda_dir.join("docker-compose.yml");
     let cf = compose_file.to_string_lossy().to_string();
 
     // Pull images
@@ -73,7 +73,7 @@ pub async fn run(
         return Err("Failed to start services".to_string());
     }
 
-    cleanup.record(Artifact::DockerComposeUp(ctx.lokal_dir.clone()));
+    cleanup.record(Artifact::DockerComposeUp(ctx.orda_dir.clone()));
 
     // Health check
     let _ = tx

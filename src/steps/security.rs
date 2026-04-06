@@ -14,7 +14,7 @@ pub async fn run(ctx: &InstallContext, tx: &mpsc::Sender<Message>) -> Result<Ste
         let _ = tx
             .send(Message::StepLog(
                 Step::Security,
-                "Security already configured (ufw active with Lokal rules)".to_string(),
+                "Security already configured (ufw active with Orda rules)".to_string(),
             ))
             .await;
         return Ok(StepOutcome::Done);

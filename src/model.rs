@@ -106,15 +106,15 @@ pub struct HostInfo {
 #[derive(Clone, Debug)]
 pub struct InstallContext {
     pub dry_run: bool,
-    pub lokal_dir: PathBuf,
+    pub orda_dir: PathBuf,
     pub semerkant_url: String,
     pub image: String,
     pub license_key: String,
     pub arch: String,
     pub use_sudo: bool,
     pub domain: Option<String>,
-    pub lokal_uid: u32,
-    pub lokal_gid: u32,
+    pub orda_uid: u32,
+    pub orda_gid: u32,
     pub health_token: String,
     pub lk_api_key: String,
     pub lk_api_secret: String,
@@ -124,18 +124,18 @@ pub struct InstallContext {
 }
 
 impl InstallContext {
-    pub fn new(dry_run: bool, lokal_dir: PathBuf, semerkant_url: String, image: String) -> Self {
+    pub fn new(dry_run: bool, orda_dir: PathBuf, semerkant_url: String, image: String) -> Self {
         Self {
             dry_run,
-            lokal_dir,
+            orda_dir,
             semerkant_url,
             image,
             license_key: String::new(),
             arch: String::new(),
             use_sudo: false,
             domain: None,
-            lokal_uid: 0,
-            lokal_gid: 0,
+            orda_uid: 0,
+            orda_gid: 0,
             health_token: String::new(),
             lk_api_key: String::new(),
             lk_api_secret: String::new(),

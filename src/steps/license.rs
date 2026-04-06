@@ -25,7 +25,7 @@ pub async fn run(ctx: &InstallContext, tx: &mpsc::Sender<Message>) -> Result<Ste
     }
 
     // Resuming from existing .env
-    let env_path = ctx.lokal_dir.join(".env");
+    let env_path = ctx.orda_dir.join(".env");
     if !ctx.dry_run
         && env_path.exists()
         && let Ok(contents) = tokio::fs::read_to_string(&env_path).await

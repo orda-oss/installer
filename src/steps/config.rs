@@ -14,7 +14,7 @@ pub async fn run(
     tx: &mpsc::Sender<Message>,
     cleanup: &CleanupRegistry,
 ) -> Result<StepOutcome, String> {
-    let dir = &ctx.lokal_dir;
+    let dir = &ctx.orda_dir;
 
     let health_token = derive_health_token(&ctx.license_key);
     let lk_api_key = generate_lk_key();
@@ -112,7 +112,7 @@ pub async fn run(
 
     // docker-compose.yml (always regenerate)
     let compose_path = dir.join("docker-compose.yml");
-    let content = templates::render_docker_compose(&ctx.image, ctx.lokal_uid, ctx.lokal_gid);
+    let content = templates::render_docker_compose(&ctx.image, ctx.orda_uid, ctx.orda_gid);
     write_file(&compose_path, &content, ctx.dry_run, ctx.use_sudo).await?;
     if !ctx.dry_run {
         cleanup.record(Artifact::FileCreated(compose_path));
@@ -125,14 +125,14 @@ pub async fn run(
         .await;
 
     if !ctx.dry_run {
-        let lokal_dir_str = dir.to_string_lossy();
+        let orda_dir_str = dir.to_string_lossy();
         let _ = run_sudo(
             Step::Configuration,
             tx,
             false,
             ctx.use_sudo,
             "chown",
-            &["-R", "lokal:lokal", &lokal_dir_str],
+            &["-R", "orda:orda", &orda_dir_str],
         )
         .await;
     }

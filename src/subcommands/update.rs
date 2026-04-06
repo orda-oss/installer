@@ -1,15 +1,15 @@
 use std::path::Path;
 
-pub async fn run(lokal_dir: &Path) -> Result<(), String> {
-    let compose_file = lokal_dir.join("docker-compose.yml");
+pub async fn run(orda_dir: &Path) -> Result<(), String> {
+    let compose_file = orda_dir.join("docker-compose.yml");
     if !compose_file.exists() {
         return Err(format!(
-            "No installation found at {}. Run 'lokal install' first.",
-            lokal_dir.display()
+            "No installation found at {}. Run 'orda install' first.",
+            orda_dir.display()
         ));
     }
 
-    println!("Updating Lokal at {}...", lokal_dir.display());
+    println!("Updating Orda at {}...", orda_dir.display());
 
     let compose_str = compose_file.to_string_lossy();
 

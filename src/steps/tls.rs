@@ -25,8 +25,8 @@ pub async fn run(
     let cert_data =
         api::fetch_certificate(&client, &ctx.semerkant_url, &ctx.license_key, ctx.dry_run).await?;
 
-    let cert_path = ctx.lokal_dir.join("tls/cert.pem");
-    let key_path = ctx.lokal_dir.join("tls/key.pem");
+    let cert_path = ctx.orda_dir.join("tls/cert.pem");
+    let key_path = ctx.orda_dir.join("tls/key.pem");
 
     write_file(
         &cert_path,

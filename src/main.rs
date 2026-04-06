@@ -33,16 +33,16 @@ async fn main() {
     let cli = Cli::parse();
 
     let result = match cli.command {
-        Some(Command::Update(args)) => subcommands::update::run(&args.lokal_dir).await,
+        Some(Command::Update(args)) => subcommands::update::run(&args.orda_dir).await,
         Some(Command::Uninstall(args)) => {
-            subcommands::uninstall::run(&args.lokal_dir, args.yes).await
+            subcommands::uninstall::run(&args.orda_dir, args.yes).await
         }
-        Some(Command::Status(args)) => subcommands::status::run(&args.lokal_dir).await,
+        Some(Command::Status(args)) => subcommands::status::run(&args.orda_dir).await,
         // No subcommand defaults to install
         Some(Command::Install(args)) => run_install(args).await,
         None => {
-            // Re-parse as "lokal install" to get clap's default values
-            let cli = Cli::parse_from(["lokal", "install"]);
+            // Re-parse as "orda install" to get clap's default values
+            let cli = Cli::parse_from(["orda", "install"]);
             if let Some(Command::Install(args)) = cli.command {
                 run_install(args).await
             } else {
@@ -59,7 +59,7 @@ async fn main() {
 
 async fn run_install(args: InstallArgs) -> Result<(), String> {
     let mut context =
-        InstallContext::new(args.dry_run, args.lokal_dir, args.semerkant_url, args.image);
+        InstallContext::new(args.dry_run, args.orda_dir, args.semerkant_url, args.image);
 
     if let Some(key) = args.license_key {
         context.license_key = key;
