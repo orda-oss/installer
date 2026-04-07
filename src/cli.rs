@@ -48,7 +48,7 @@ pub struct InstallArgs {
     pub semerkant_url: String,
 
     /// Docker image for alacahoyuk
-    #[arg(long, default_value = "ghcr.io/rwxdash/alacahoyuk:latest")]
+    #[arg(long, default_value = "ghcr.io/orda-oss/alacahoyuk:latest")]
     pub image: String,
 }
 
