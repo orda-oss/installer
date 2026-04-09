@@ -1,6 +1,6 @@
 use crossterm::event::KeyEvent;
 
-use crate::model::{HostInfo, SecurityChoice, Step};
+use crate::model::{HostInfo, Step};
 
 pub enum Message {
     Key(KeyEvent),
@@ -18,7 +18,6 @@ pub enum Message {
     LicenseKeySet(String),
     DomainResolved(String),
     UidResolved(u32, u32),
-    SecurityChosen(SecurityChoice),
     KeysGenerated {
         health_token: String,
         lk_api_key: String,

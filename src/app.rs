@@ -225,11 +225,6 @@ impl App {
                 Effect::None
             }
 
-            Message::SecurityChosen(choice) => {
-                self.context.security_choice = choice;
-                Effect::None
-            }
-
             Message::KeysGenerated {
                 health_token,
                 lk_api_key,
@@ -408,18 +403,14 @@ impl App {
         }
     }
 
-    fn submit_security_choice(&self) -> Effect {
-        let choice = if self.security_selection == 0 {
+    fn submit_security_choice(&mut self) -> Effect {
+        self.context.security_choice = if self.security_selection == 0 {
             SecurityChoice::InstallFirewall
         } else {
             SecurityChoice::Skip
         };
-        let tx = self.tx.clone();
-        tokio::spawn(async move {
-            let _ = tx.send(Message::SecurityChosen(choice)).await;
-            let _ = tx.send(Message::StepCompleted(Step::Security)).await;
-        });
-        Effect::None
+        // Re-spawn the security step so it can apply the choice
+        Effect::SpawnStep(Step::Security)
     }
 
     fn advance(&mut self) -> Effect {
