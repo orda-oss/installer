@@ -56,7 +56,7 @@ async fn apply_firewall(
     ssh_port: u16,
 ) -> Result<(), String> {
     // Install ufw if not present
-    if !command_exists("ufw") {
+    if !ctx.dry_run && !command_exists("ufw") {
         let _ = tx
             .send(Message::StepLog(
                 Step::Security,
@@ -72,10 +72,10 @@ async fn apply_firewall(
             &["install", "-y", "-qq", "ufw"],
         )
         .await?;
-    }
 
-    if !ctx.dry_run && !command_exists("ufw") {
-        return Err("Failed to install ufw".to_string());
+        if !command_exists("ufw") {
+            return Err("Failed to install ufw".to_string());
+        }
     }
 
     let _ = tx
@@ -87,7 +87,8 @@ async fn apply_firewall(
 
     let ssh_rule = format!("{}/tcp", ssh_port);
 
-    // Set defaults
+    // All ufw commands are idempotent: re-running is safe and ensures
+    // rules are present even if a previous run was partially interrupted.
     run_sudo(
         Step::Security,
         tx,
@@ -108,7 +109,6 @@ async fn apply_firewall(
     )
     .await?;
 
-    // Allow required ports
     for rule in &[
         &ssh_rule as &str,
         "80/tcp",
@@ -127,7 +127,6 @@ async fn apply_firewall(
         .await?;
     }
 
-    // Enable
     run_sudo(
         Step::Security,
         tx,
@@ -156,7 +155,8 @@ async fn apply_fail2ban(
     tx: &mpsc::Sender<Message>,
     ssh_port: u16,
 ) -> Result<(), String> {
-    if !command_exists("fail2ban-client") {
+    // Install fail2ban if not present
+    if !ctx.dry_run && !command_exists("fail2ban-client") {
         let _ = tx
             .send(Message::StepLog(
                 Step::Security,
@@ -172,19 +172,20 @@ async fn apply_fail2ban(
             &["install", "-y", "-qq", "fail2ban"],
         )
         .await?;
+
+        if !command_exists("fail2ban-client") {
+            // Non-fatal: log and continue
+            let _ = tx
+                .send(Message::StepLog(
+                    Step::Security,
+                    "fail2ban not available, skipping".to_string(),
+                ))
+                .await;
+            return Ok(());
+        }
     }
 
-    if !ctx.dry_run && !command_exists("fail2ban-client") {
-        // Non-fatal: log and continue
-        let _ = tx
-            .send(Message::StepLog(
-                Step::Security,
-                "fail2ban not available, skipping".to_string(),
-            ))
-            .await;
-        return Ok(());
-    }
-
+    // Always write the jail config (idempotent: overwrites with same content)
     let jail_conf = format!(
         "[sshd]\nenabled = true\nport = {}\nmaxretry = 5\nfindtime = 3600\nbantime = 86400\n",
         ssh_port
