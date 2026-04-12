@@ -114,6 +114,14 @@ cargo build --release --target x86_64-unknown-linux-musl
 cargo build --release --target aarch64-unknown-linux-musl
 ```
 
+## Support
+
+Orda is built and maintained by a single person. If you find it useful, a donation goes a long way toward keeping the project alive. A donation channel is being set up and will be linked here soon.
+
+If you or your organization are interested in sponsoring or making a larger contribution before the donation channel is live, reach out at [hello@joinorda.com](mailto:hello@joinorda.com).
+
+In the meantime, the best way to support the project is to use it, report bugs, and spread the word. If you have legal expertise, the [Privacy Policy](https://orda.chat/privacy) and [Terms of Service](https://orda.chat/terms) are open for review on [GitHub](https://github.com/orda-oss/web).
+
 ## Issues
 
 Report bugs and feature requests at [github.com/orda-oss/installer/issues](https://github.com/orda-oss/installer/issues).

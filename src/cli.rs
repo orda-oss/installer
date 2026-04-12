@@ -47,8 +47,8 @@ pub struct InstallArgs {
     #[arg(long, default_value = "https://api.orda.chat/hub/v1")]
     pub semerkant_url: String,
 
-    /// Docker image for alacahoyuk
-    #[arg(long, default_value = "ghcr.io/orda-oss/alacahoyuk:latest")]
+    /// Docker image for orda-server
+    #[arg(long, default_value = "ghcr.io/orda-oss/orda-server:latest")]
     pub image: String,
 }
 
