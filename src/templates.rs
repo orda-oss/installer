@@ -49,7 +49,12 @@ pub fn render_caddyfile(domain: &str) -> String {
 }}
 
 {domain} {{
-    tls /etc/caddy/tls/cert.pem /etc/caddy/tls/key.pem
+    tls /etc/caddy/tls/cert.pem /etc/caddy/tls/key.pem {{
+        protocols tls1.2 tls1.3
+    }}
+    header {{
+        Strict-Transport-Security \"max-age=31536000; includeSubDomains\"
+    }}
     handle_path /lk/* {{
         reverse_proxy livekit:7880
     }}
